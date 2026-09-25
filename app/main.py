@@ -1,56 +1,38 @@
-# from pathlib import Path
+from pathlib import Path
 
-# from fastapi import FastAPI, Request
-# from fastapi.responses import HTMLResponse
-# from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
-# from app.api.main import api_router
-# from app.core.config import settings
+from app.api.main import api_router
+from app.core.config import settings
 
-# app = FastAPI(
-#     title=settings.PROJECT_NAME,
-#     description=settings.PROJECT_NAME,
-#     version=settings.VERSION,
-# )
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    description=settings.PROJECT_NAME,
+    version=settings.VERSION,
+)
 
-# app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
-# templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
-
-
-# @app.get("/start")
-# def read_root():
-#     return {"message": "Look Ma, I'm deployed!"}
-
-# @app.get("/api/health")
-# def health_check():
-#     return {"status": "healthy"}
+templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
 
 
-# @app.get("/", response_class=HTMLResponse)
-# def read_root(request: Request):
-#     return templates.TemplateResponse(request, "index.html")
-
-
-# if __name__ == "__main__":
-#     import uvicorn
-
-#     uvicorn.run("app.main:app", host="0.0.0.0", port=5001, reload=True)
-
-# main.py
-from fastapi import FastAPI
-
-app = FastAPI()
-
-@app.get("/")
+@app.get("/start")
 def read_root():
-    return {"message": "Hello World from FastAPI on Vercel!"}
+    return {"message": "Look Ma, I'm deployed!"}
 
 @app.get("/api/health")
 def health_check():
     return {"status": "healthy"}
 
-# This is important for Vercel
+
+@app.get("/", response_class=HTMLResponse)
+def read_root(request: Request):
+    return templates.TemplateResponse(request, "index.html")
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    uvicorn.run("app.main:app", host="0.0.0.0", port=5001, reload=True)
